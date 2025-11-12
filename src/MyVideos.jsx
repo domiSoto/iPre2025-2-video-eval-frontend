@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 import "./MyVideos.css";
 import Navbar from "./Navbar";
 
@@ -32,7 +32,9 @@ const videos = [
 ];
 
 export default function MyVideos() {
+  const { id } = useParams();
   const navigate = useNavigate();
+
   return (
     <div className="page-container">
       <div className="layout-container">

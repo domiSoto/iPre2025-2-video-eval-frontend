@@ -17,15 +17,15 @@ function Routing(){
                 <Route path={"/my-workspaces"} element={<MyWorkspaces />}/>
 
                 <Route path={"/create-workspace"} element={<WorkspaceForm mode="create" />}/>
-                <Route path={"/workspace"} element={<WorkspaceForm mode="view" />}/>
-                
-                <Route path={"/create-rubric"} element={<CreateRubric />}/>
-                <Route path={"/upload-video"} element={<UploadVideo />}/>
-                <Route path={"/videos"} element={<MyVideos />}/>
-                <Route path={"/dashboard"} element={<Dashboard />}/>
+                <Route path={"/workspace/:workspaceId"} element={<WorkspaceForm mode="view" />}/>
 
-                <Route path={"/evaluate-video"} element={<EvaluateVideo />}/>
-                <Route path={"/detailed-search"} element={<DetailedSearch />}/>
+                <Route path={"/workspace/:workspaceId/create-rubric/"} element={<CreateRubric />}/>
+                <Route path={"/workspace/:workspaceId/upload-video"} element={<UploadVideo />}/>
+                <Route path={"/workspace/:workspaceId/videos"} element={<MyVideos />}/>
+                <Route path={"/workspace/:workspaceId/dashboard"} element={<Dashboard />}/>
+
+                <Route path={"/evaluate-video/:videoId"} element={<EvaluateVideo />}/>
+                <Route path={"/detailed-search/:videoId"} element={<DetailedSearch />}/>
             </Routes>
         </BrowserRouter>
     )
