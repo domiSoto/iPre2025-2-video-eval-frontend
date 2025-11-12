@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import "./MyVideos.css";
 import Navbar from "./Navbar";
@@ -32,8 +32,55 @@ const videos = [
 ];
 
 export default function MyVideos() {
-  const { id } = useParams();
+  const { workspaceId } = useParams();
   const navigate = useNavigate();
+
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/workspaces/${workspaceId}/pairs`);
+        if (!response.ok) {
+          throw new Error(`Error al obtener videos (status ${response.status})`);
+        }
+
+        const data = await response.json();
+        setVideos(data);
+      } catch (err) {
+        console.error("Error cargando videos:", err);
+        setError("No se pudieron cargar los videos.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, [workspaceId]);
+
+  if (loading) {
+    return (
+      <div className="page-container">
+        <Navbar />
+        <div className="main-content">
+          <p style={{ padding: "2rem" }}>Cargando videos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container">
+        <Navbar />
+        <div className="main-content">
+          <p style={{ color: "red", padding: "2rem" }}>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
@@ -48,40 +95,69 @@ export default function MyVideos() {
               </div>
             </div>
             <div className="dashboard-recent-evals-wrapper">
-            <div className="dashboard-recent-evals-table-container">
+              <div className="dashboard-recent-evals-table-container">
                 <table className="dashboard-recent-evals-table">
-                <thead>
+                  <thead>
                     <tr>
-                    <th className="dashboard-table-col-title">Vista previa</th>
-                    <th className="dashboard-table-col-evaluator">Estado</th>
-                    <th className="dashboard-table-col-score">Acciones</th>
+                      <th className="dashboard-table-col-title">Vista previa</th>
+                      <th className="dashboard-table-col-evaluator">Estado</th>
+                      <th className="dashboard-table-col-score">Acciones</th>
                     </tr>
-                </thead>
-                <tbody>
-                    {videos.map((video, idx) => (
-                    <tr key={idx}>
-                        <td className="dashboard-table-col-title">
-                          <div
-                            className="videos-preview-img"
-                            style={{ backgroundImage: `url('${video.preview}')`, width: '120px', height: '70px', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: 0 }}
-                          ></div>
+                  </thead>
+                  <tbody>
+                    {videos.length === 0 ? (
+                      <tr>
+                        <td colSpan="3" style={{ textAlign: "center", padding: "1rem" }}>
+                          No hay videos en este workspace.
                         </td>
-                        <td className="dashboard-table-col-evaluator">{video.status}</td>
-                        <td className="dashboard-table-col-score">
-                          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <button className="dashboard-score-btn" onClick={() => navigate('/detailed-search')}>
-                              <span>Ver Video</span>
-                            </button>
-                            <button className="dashboard-score-btn" onClick={() => navigate('/evaluate-video')}>
-                              <span>Evaluar</span>
-                            </button>
-                          </div>
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
+                      </tr>
+                    ) : (
+                      videos.map((video, idx) => (
+                        <tr key={idx}>
+                          <td className="dashboard-table-col-title">
+                            <div
+                              className="videos-preview-img"
+                              style={{
+                                backgroundImage: `url('${video.urls?.thumbnail || "/default-thumbnail.png"}')`,
+                                width: "120px",
+                                height: "70px",
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                              }}
+                            ></div>
+                          </td>
+                          <td className="dashboard-table-col-evaluator">
+                            {video.status || "Desconocido"}
+                          </td>
+                          <td className="dashboard-table-col-score">
+                            <div
+                              style={{
+                                display: "flex",
+                                gap: "12px",
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                              }}
+                            >
+                              <button
+                                className="dashboard-score-btn"
+                                onClick={() => navigate(`/detailed-search/${video.jobId}`)}
+                              >
+                                <span>Ver Video</span>
+                              </button>
+                              <button
+                                className="dashboard-score-btn"
+                                onClick={() => navigate(`/evaluate-video/${video.jobId}`)}
+                              >
+                                <span>Evaluar</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
                 </table>
-            </div>
+              </div>
             </div>
           </div>
         </div>

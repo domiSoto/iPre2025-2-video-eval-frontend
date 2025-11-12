@@ -23,8 +23,8 @@ export default function UploadVideo() {
   const handleAudioVideoFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.type !== "audio/mp3" && file.type !== "video/mp4") {
-        alert("Only MP3 and MP4 files are allowed for audio/video.");
+      if (!file.type.startsWith("audio/") && !file.type.startsWith("video/")) {
+        alert("Only audio or video files are allowed (e.g., MP3, MP4).");
         return;
       }
       setAudioFile(file);
@@ -120,7 +120,7 @@ export default function UploadVideo() {
                   ref={audioVideoInputRef}
                   style={{ display: "none" }}
                   onChange={handleAudioVideoFileChange}
-                  accept="audio/mp3, video/mp4"
+                  accept="audio/mpeg,video/mp4"
                 />
               </div>
             </div>
