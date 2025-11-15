@@ -83,8 +83,6 @@ export default function UploadVideo() {
       alert("Error uploading files.");
     } finally {
       setUploading(false);
-      // Si todo va bien, redirigir
-      navigate(`/workspace/${workspaceId}/videos`);
     }
   };
 

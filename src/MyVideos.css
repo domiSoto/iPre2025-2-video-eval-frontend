@@ -103,3 +103,76 @@
 .videos-action-link:hover {
   color: #141414;
 }
+.dashboard-recent-evals-table-container {
+  overflow-x: auto; /* permite scroll si pantalla es muy pequeña */
+}
+
+.dashboard-recent-evals-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* clave para respetar anchos proporcionales */
+}
+
+/* Columna proporcional */
+.dashboard-recent-evals-table th,
+.dashboard-recent-evals-table td {
+  text-align: center;
+  padding: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Definir anchos proporcionales */
+/* 3 columnas pequeñas = 1fr cada una, 2 columnas grandes = 2fr cada una */
+/* Total fr = 3 + 2*2 = 7fr */
+.dashboard-table-col-title,
+.dashboard-table-col-presentation,
+.dashboard-table-col-evaluator {
+  width: calc(100% * 1 / 7); /* cada una toma 1/7 del ancho total */
+}
+
+.dashboard-table-col-progress,
+.dashboard-table-col-score {
+  width: calc(100% * 1.5 / 7); /* cada una toma 2/7 del ancho total */
+}
+
+/* Centramos elementos internos */
+.dashboard-table-col-title .videos-preview-img,
+.dashboard-table-col-presentation .file-icon {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Ícono de archivo más grande */
+.file-icon {
+  font-size: 28px;
+  color: #444;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.file-icon:hover {
+  color: #007bff;
+  transform: scale(1.2);
+}
+
+/* Vista previa imagen */
+.videos-preview-img {
+  width: 100%;
+  height: 60px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 5%;
+}
+
+.file-icon {
+  font-size: 28px; /* antes 22px */
+  color: #444;
+  display: inline-block;
+  transition: 0.2s;
+}
+
+.file-icon:hover {
+  color: #007bff;
+  transform: scale(1.2); /* ligero efecto al pasar el mouse */
+}

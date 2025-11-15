@@ -60,8 +60,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Aquí puedes poner el avatar o menú de usuario */}
-        <div className="user-avatar"></div>
       </div>
     </header>
   );

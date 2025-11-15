@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import "./Dashboard.css";
 
 export default function Dashboard() {
+  const { workspaceId } = useParams();
+  const [data, setData] = React.useState(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/workspaces/${workspaceId}/dashboard`);
+        const data = await res.json();
+        console.log("Fetched dashboard data:", data);
+        setData(data);
+      } catch (e) {
+        console.error("Failed to fetch dashboard data:", e);
+      }
+    };
+
+    fetchDashboardData();
+  }, [workspaceId]);
+
   return (
     <div className="dashboard-root">
       <div className="dashboard-layout-container">
@@ -18,58 +37,59 @@ export default function Dashboard() {
             <div className="dashboard-summary-cards-row">
               <div className="dashboard-summary-card">
                 <p className="dashboard-summary-card-title">Evaluaciones Completadas</p>
-                <p className="dashboard-summary-card-value">150</p>
+                <p className="dashboard-summary-card-value">{data?.totalEvaluations}</p>
               </div>
               <div className="dashboard-summary-card">
                 <p className="dashboard-summary-card-title">Puntuación Promedio</p>
-                <p className="dashboard-summary-card-value">4.2/7</p>
+                <p className="dashboard-summary-card-value">{data?.averageScore}</p>
               </div>
               <div className="dashboard-summary-card">
                 <p className="dashboard-summary-card-title">Puntuación promedio por criterio</p>
-                <p className="dashboard-summary-card-value">4.3/7</p>
+                <p className="dashboard-summary-card-value">{data?.criteriaAverages}</p>
               </div>
             </div>
             <h2 className="dashboard-section-title">Distribución de Puntaje</h2>
             <div className="dashboard-distribution-row">
               <div className="dashboard-distribution-card">
-                <p className="dashboard-distribution-card-title">Distribución de Puntaje Total</p>
-                {(() => {
-                  const values = [5,20,15,20,20,15,5];
-                  const max = Math.max(...values);
-                  return (
-                    <div className="dashboard-distribution-bar-group-flex">
-                      {values.map((value, i) => {
-                        const percent = (value / max) * 100;
-                        return (
-                          <div key={i} className="dashboard-distribution-bar-flex">
-                            <div className="dashboard-distribution-bar" style={{height: `${percent}%`}}></div>
-                            <span className="dashboard-distribution-label">{i+1}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })()}
+                <p className="dashboard-distribution-card-title">Distribución de Puntaje Total (redondeados)</p>
+                <div className="dashboard-distribution-bar-group-flex">
+                  {Object.entries(data?.scoreDistribution || {}).map(([score, count], i, arr) => {
+                    const max = Math.max(...Object.values(data.scoreDistribution));
+                    const percent = (count / max) * 100;
+                    return (
+                      <div key={i} className="dashboard-distribution-bar-flex">
+                        <div className="dashboard-distribution-bar" style={{height: `${percent}%`}}></div>
+                        <span className="dashboard-distribution-label">{score}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div className="dashboard-distribution-card">
                 <p className="dashboard-distribution-card-title">Distribución de Puntaje por Criterio de la Rúbrica</p>
-                {(() => {
-                  const values = [40,80,30,20,80];
-                  const max = Math.max(...values);
-                  return (
-                    <div className="dashboard-distribution-bar-group-flex">
-                      {values.map((value, i) => {
-                        const percent = (value / max) * 100;
-                        return (
-                          <div key={i} className="dashboard-distribution-bar-flex">
-                            <div className="dashboard-distribution-bar" style={{height: `${percent}%`}}></div>
-                            <span className="dashboard-distribution-label">{`Criterio ${i+1}`}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })()}
+                <div className="dashboard-distribution-bar-group-flex">
+                  {Object.entries(data?.criteriaDistributions || {}).map(([criterion, dist], i) => {
+                    // Tomamos el valor total o el máximo del criterio
+                    const total = Object.values(dist).reduce((a, b) => a + b, 0);
+                    const max = Math.max(...Object.values(data.criteriaDistributions).map(d => Object.values(d).reduce((a,b)=>a+b,0)));
+                    const percent = (total / max) * 100;
+
+                    return (
+                      <div key={i} className="dashboard-distribution-bar-flex">
+                        <div
+                          className="dashboard-distribution-bar"
+                          style={{ height: `${percent}%` }}
+                        ></div>
+                        <span
+                          className="dashboard-distribution-label-2"
+                          style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}
+                        >
+                          {criterion}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
             <h2 className="dashboard-section-title">Evaluaciones Recientes</h2>
@@ -79,42 +99,33 @@ export default function Dashboard() {
                   <thead>
                     <tr>
                       <th className="dashboard-table-col-title">Título del Video</th>
-                      <th className="dashboard-table-col-evaluator">Evaluador</th>
                       <th className="dashboard-table-col-score">Puntuación</th>
                       <th className="dashboard-table-col-date">Fecha</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="dashboard-table-col-title">Presentación del Proyecto Alfa</td>
-                      <td className="dashboard-table-col-evaluator">Sofía Rodríguez</td>
-                      <td className="dashboard-table-col-score"><button className="dashboard-score-btn"><span>4.5</span></button></td>
-                      <td className="dashboard-table-col-date">2024-07-26</td>
-                    </tr>
-                    <tr>
-                      <td className="dashboard-table-col-title">Demostración del Producto - Versión Beta</td>
-                      <td className="dashboard-table-col-evaluator">Carlos García</td>
-                      <td className="dashboard-table-col-score"><button className="dashboard-score-btn"><span>3.8</span></button></td>
-                      <td className="dashboard-table-col-date">2024-07-25</td>
-                    </tr>
-                    <tr>
-                      <td className="dashboard-table-col-title">Revisión de la Campaña de Marketing</td>
-                      <td className="dashboard-table-col-evaluator">Ana López</td>
-                      <td className="dashboard-table-col-score"><button className="dashboard-score-btn"><span>4.9</span></button></td>
-                      <td className="dashboard-table-col-date">2024-07-24</td>
-                    </tr>
-                    <tr>
-                      <td className="dashboard-table-col-title">Presentación de Ventas - Estrategia del Q3</td>
-                      <td className="dashboard-table-col-evaluator">Diego Martínez</td>
-                      <td className="dashboard-table-col-score"><button className="dashboard-score-btn"><span>4.2</span></button></td>
-                      <td className="dashboard-table-col-date">2024-07-23</td>
-                    </tr>
-                    <tr>
-                      <td className="dashboard-table-col-title">Módulo de Capacitación - Incorporación</td>
-                      <td className="dashboard-table-col-evaluator">Laura Pérez</td>
-                      <td className="dashboard-table-col-score"><button className="dashboard-score-btn"><span>4.0</span></button></td>
-                      <td className="dashboard-table-col-date">2024-07-22</td>
-                    </tr>
+                    {data?.recentEvaluations?.length > 0 ? (
+                      data.recentEvaluations.map((eval_, index) => (
+                        <tr key={index}>
+                          <td className="dashboard-table-col-title">{eval_.videoTitle}</td>
+                          {/* Cambia si tienes info del evaluador */}
+                          <td className="dashboard-table-col-score">
+                            <button className="dashboard-score-btn">
+                              <span>{eval_.totalScore}</span>
+                            </button>
+                          </td>
+                          <td className="dashboard-table-col-date">
+                            {new Date(eval_.createdAt).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} style={{ textAlign: "center" }}>
+                          No hay evaluaciones recientes
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

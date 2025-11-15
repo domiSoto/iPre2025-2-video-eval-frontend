@@ -24,8 +24,8 @@ function Routing(){
                 <Route path={"/workspace/:workspaceId/videos"} element={<MyVideos />}/>
                 <Route path={"/workspace/:workspaceId/dashboard"} element={<Dashboard />}/>
 
-                <Route path={"/evaluate-video/:videoId"} element={<EvaluateVideo />}/>
-                <Route path={"/detailed-search/:videoId"} element={<DetailedSearch />}/>
+                <Route path={"/evaluate-video/:videoJobId"} element={<EvaluateVideo />}/>
+                <Route path={"/detailed-search/:videoJobId"} element={<DetailedSearch />}/>
             </Routes>
         </BrowserRouter>
     )

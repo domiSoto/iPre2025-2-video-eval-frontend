@@ -100,11 +100,10 @@
   text-overflow: ellipsis;
 }
 .myworkspaces-desc {
-  color: #888;
-  font-size: 0.95rem;
-  font-weight: 400;
-  line-height: 1.2;
-  white-space: nowrap;
+  display: -webkit-box;      /* Necesario para Safari/Chrome */
+  -webkit-line-clamp: 2;     /* Para Chrome/Safari/Edge */
+  -webkit-box-orient: vertical;
+  line-clamp: 2;             /* Propiedad estándar */
   overflow: hidden;
   text-overflow: ellipsis;
 }
