@@ -100,10 +100,10 @@
   text-overflow: ellipsis;
 }
 .myworkspaces-desc {
-  display: -webkit-box;      /* Necesario para Safari/Chrome */
-  -webkit-line-clamp: 2;     /* Para Chrome/Safari/Edge */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-clamp: 2;             /* Propiedad estándar */
+  line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }

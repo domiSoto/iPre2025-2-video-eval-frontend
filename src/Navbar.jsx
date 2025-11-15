@@ -7,7 +7,7 @@ export default function Navbar() {
   const { workspaceId } = useParams(); // <-- Captura el ID del workspace si está en la ruta
 
   // Saber si estamos dentro de un workspace
-  const inWorkspace = location.pathname.startsWith("/workspace/") && workspaceId;
+  const inWorkspace = location.pathname.startsWith("/workspace/")  && workspaceId;
 
   return (
     <header className="header">
