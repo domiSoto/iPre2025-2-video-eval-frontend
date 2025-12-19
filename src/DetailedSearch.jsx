@@ -102,6 +102,12 @@ export default function DetailedSearch() {
           </label>
         </div>
 
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
         {/* Contenedor de 2 columnas */}
         <div style={{ display: 'flex', gap: '2rem' }}>
         {/* Columna izquierda: video */}

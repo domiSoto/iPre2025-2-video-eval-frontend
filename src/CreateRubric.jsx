@@ -18,7 +18,6 @@ export default function CreateRubric() {
   const [rubricDescription, setRubricDescription] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     const fetchRubric = async () => {
@@ -85,7 +84,6 @@ export default function CreateRubric() {
 
     setSaving(true);
     setError("");
-    setSuccess("");
 
     try {
       // Preparamos los criterios en el formato que espera el backend
@@ -115,7 +113,6 @@ export default function CreateRubric() {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess("Rubric created successfully!");
         console.log("Created rubric:", data);
       } else {
         setError(data.error || "Failed to create rubric");
@@ -138,6 +135,12 @@ export default function CreateRubric() {
             <div className="page-title-container">
               <p className="page-title">Rubric</p>
             </div>
+            
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
             
             <div className="form-field">
               <label className="label-container">

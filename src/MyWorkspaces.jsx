@@ -40,6 +40,11 @@ export default function MyWorkspaces() {
                 <span className="truncate">New Workspace</span>
               </button>
             </div>
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
             <div className="myworkspaces-list">
               {workspaces.length === 0 && (
                 <p>No workspaces found. Create one!</p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import "./EvaluateVideo.css";
@@ -60,8 +60,6 @@ export default function EvaluateVideo() {
 
   if (error) return <div>Error: {error}</div>;
   if (results.length === 0) return <div>Cargando evaluaciones...</div>;
-
-  const evaluation = results[0];
 
   const handleSave = async () => {
     try {

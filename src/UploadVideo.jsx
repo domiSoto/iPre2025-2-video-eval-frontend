@@ -1,11 +1,10 @@
 import React, { useRef, useState } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import "./UploadVideo.css";
 
 export default function UploadVideo() {
   const { workspaceId } = useParams();
-  const navigate = useNavigate();
 
   const [audioVideoFileName, setAudioVideoFileName] = useState("");
   const [audioVideoFileSize, setAudioVideoFileSize] = useState("");

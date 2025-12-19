@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import "./Dashboard.css";
@@ -53,7 +53,7 @@ export default function Dashboard() {
               <div className="dashboard-distribution-card">
                 <p className="dashboard-distribution-card-title">Distribución de Puntaje Total (redondeados)</p>
                 <div className="dashboard-distribution-bar-group-flex">
-                  {Object.entries(data?.scoreDistribution || {}).map(([score, count], i, arr) => {
+                  {Object.entries(data?.scoreDistribution || {}).map(([score, count], i) => {
                     const max = Math.max(...Object.values(data.scoreDistribution));
                     const percent = (count / max) * 100;
                     return (
